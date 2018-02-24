@@ -6,7 +6,6 @@
 #include "HepMC/IO_GenEvent.h"
 #include "HepMC/GenEvent.h"
 
-//FastJet
 #include <fastjet/PseudoJet.hh>
 #include <fastjet/ClusterSequence.hh>
 #include <fastjet/Selector.hh>
@@ -30,31 +29,30 @@ int main(int argc, char *argv[]) {
     cout << "ERROR: Give HepMC file as argument" << endl;
     return 1;
   }
-
   string hepmcfile = argv[1];
-  PseudoJet lep;
-
-  
   HepMC::IO_GenEvent ascii_in(hepmcfile,std::ios::in);
   HepMC::GenEvent* evt = ascii_in.read_next_event();
-  int icount = 0;
-  int nhadrons;
+
   double R_jet = 0.4;
   JetDefinition jet_def(antikt_algorithm, R_jet);
+  Selector select_akt = SelectorAbsEtaMax(5.0) && SelectorPtMin(20.);
 
-  Selector select_akt = SelectorAbsEtaMax(5.0) && SelectorPtMin(20.);;
   double ETmiss;
   
   vector<PseudoJet> hadrons, electrons, muons, photons;
-  
+
+  //book histograms
   Histo h_ETmiss(0,2000,50);
+
+  bool verbose = false;
   
   //begin event loop
+  int icount = 0;
   while ( evt ) {
     
     if ( icount % 10000 == 0) cout << icount << endl;
-    cout << "------------------------" << endl;
-    cout << "Processing Event Number " << icount << endl;
+    if (verbose) cout << "------------------------" << endl;
+    if (verbose) cout << "Processing Event Number " << icount << endl;
     //    cout << "Its event weight " << evt->cross_section()->cross_section() << endl;
 
     PseudoJet visible(0.,0.,0.,0.);
@@ -70,9 +68,11 @@ int main(int argc, char *argv[]) {
       
       //get final state particles:
 
-      //hadrons: TODO: b-tagging
+      //hadrons and b-tagging
       if (isHadron(*p) && isFinal(*p)){
+	int btag = isBHadron(*p) ? 1 : 0;
 	PseudoJet tmp((*p)->momentum().px(),(*p)->momentum().py(), (*p)->momentum().pz(), (*p)->momentum().e());
+	tmp.set_user_index(btag);
 	hadrons.push_back(tmp);
 	visible += tmp;
       }
@@ -97,7 +97,6 @@ int main(int argc, char *argv[]) {
 	muons.push_back(tmp);
 	visible += tmp;
       }
-      
       
     } //end particle loop
     

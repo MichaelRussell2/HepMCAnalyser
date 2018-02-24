@@ -1,4 +1,7 @@
+#ifndef UTILS_HH
+#define UTILS_HH
 
+#include <fastjet/PseudoJet.hh>
 #include "HepMC/IO_GenEvent.h"
 #include "HepMC/GenEvent.h"
 
@@ -442,8 +445,19 @@ inline bool isHadron(const HepMC::GenParticle* p){
   return isMeson(p) || isBaryon(p);
 }
 
+inline bool isBHadron(const HepMC::GenParticle* p){
+  return bottomMeson(p) || bbMeson(p) || bottomBaryon(p) ;
+}
+
 inline bool isVisible(const HepMC::GenParticle* p){
   return isElectron(p) || isMuon(p) || isPhoton(p) || isHadron(p);
 }
 
-//isSpecial, isSUSY, bTagged
+inline bool bTagged(fastjet::PseudoJet jet ){
+  for (int i=0; i < jet.constituents().size(); i++){
+    if ( jet.constituents()[i].user_index() == 1) return true;
+  }
+  return false;
+}
+
+#endif
