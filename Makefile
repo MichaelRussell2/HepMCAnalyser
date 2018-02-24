@@ -1,26 +1,20 @@
 TARGET = analysis
 ####################################
-CC = $(shell root-config --cxx)
+CC = g++
 OBJS = $(TARGET).o histo.o
-######### DEPENDENCIES #####################
 homedir	   = /remote/bigmem03/russell
-HEPMC      = ${homedir}/Install
-######### ROOT #####################
-CXXFLAGS   = -I/remote/bigmem03/russell/Install/include	
 ######### HEPMC ####################
+HEPMC      = ${homedir}/Install
 HepMCdir = ${HEPMC}
 HepMClib = -L$(HepMCdir)/lib -lHepMC
 ######### FASTJET ##################
-FASTJETLIB  = -L${FASTJET}/lib -lfastjet -Wl,-rpath=/remote/bigmem03/russell/Install/lib #-lNsubjettiness
+FASTJET	  = ${homedir}/Install
+FASTJETLIB  = -L${FASTJET}/lib -lfastjet -Wl,-rpath=${FASTJET}/lib #-lNsubjettiness
 #FASTJETLIB  = $(shell fastjet-config --libs) #-lNsubjettiness
 #-------- INCLUDE -----------------#
-INCLUDE=./include
-INCLUDES = -I${INCLUDE}
-INCLUDES += -I${HepMCdir}/include 
-INCLUDES += -I${FASTJET}/include 
-INCLUDES += -I./
+INCLUDES=-I./include -I${HepMCdir}/include -I${FASTJET}/include 
 #########  FLAGS, LIBS  ############
-CXXFLAGS += ${INCLUDES}
+CXXFLAGS = ${INCLUDES}
 CXXLIBS = ${HepMClib} ${FASTJETLIB}
 #########################################################
 
