@@ -116,7 +116,7 @@ inline bool isLast( const HepMC::GenParticle* p ) {
 }
 
 //returns true if particle not yet showered
-inline bool isOrig(const HepMC::GenParticle* p){
+inline bool isFirst(const HepMC::GenParticle* p){
   if ( p->production_vertex() ) {
     for ( HepMC::GenVertex::particle_iterator mother = p->production_vertex()->particles_begin(HepMC::parents);
 	  mother != p->production_vertex()-> particles_end(HepMC::parents); 
@@ -149,14 +149,13 @@ inline bool fromMeson( const HepMC::GenParticle* p ) {
     for ( HepMC::GenVertex::particle_iterator mother = p->production_vertex()->particles_begin(HepMC::parents);
 	  mother != p->production_vertex()-> particles_end(HepMC::parents); 
 	  ++mother ) {
-      if ( abs((*mother)->pdg_id()) > 100 ) return true;
+      if ( abs((*mother)->pdg_id()) > 100 ) return true; //@TODO: this line is wrong!
     }
     return false;
   }
   return false;
 }
 
-//@TODO: change to last three digits contains following codes
 inline bool iso1Meson(const HepMC::GenParticle* p){
   return abs(p->pdg_id()) == 111 ||
     abs(p->pdg_id()) == 211 ||
@@ -446,7 +445,7 @@ inline bool isHadron(const HepMC::GenParticle* p){
 }
 
 inline bool isBHadron(const HepMC::GenParticle* p){
-  return bottomMeson(p) || bbMeson(p) || bottomBaryon(p) ;
+  return bottomMeson(p) || bbMeson(p) || bottomBaryon(p);
 }
 
 inline bool isVisible(const HepMC::GenParticle* p){

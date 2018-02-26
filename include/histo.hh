@@ -72,7 +72,7 @@ namespace FastPartons{
     double binWidthy;
     int binCountx;
     int binCounty;
-    vector< vector<double> > weights2d;
+    vector< vector<double > > weights2d;
   };
 }
 

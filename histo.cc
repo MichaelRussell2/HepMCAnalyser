@@ -151,7 +151,7 @@ FastPartons::Histo2d::Histo2d(const double xmin, const double xmax, const double
   binWidthy = deltay;
   binCountx = (int)((maxx-minx)/binWidthx);
   binCounty = (int)((maxy-miny)/binWidthy);
-  weights2d = vector< vector<double>> (binCountx, vector<double>(binCounty,0));
+  weights2d = vector< vector<double> > (binCountx, vector<double>(binCounty,0));
 }
 
 //fill 2d histo
