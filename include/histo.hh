@@ -20,8 +20,8 @@ namespace FastPartons{
 
     void fill(double entry);
     void fill(double entry, double weight);
+    void scale(double scalefac);
     void write(const char *outfile);
-    void write(const char *outfile, double norm);
     double underflow();
     double overflow();
     void addOverflow();
@@ -45,7 +45,6 @@ namespace FastPartons{
   };
 
   //  class Histo2d: public Histo {
-  //  class Histo2d {
   //  friend class Histo;
   class Histo2d {
   public:
@@ -53,8 +52,8 @@ namespace FastPartons{
     Histo2d(double xmin, double xmax, double binWidthx, double ymin, double ymax, double binWidthy);
     void fill(double xentry, double yentry);
     void fill(double xentry, double yentry, double weight);
+    void scale(double scalefac);
     void write(const char *outfile);
-    void write(const char *outfile, double norm);
     int bins();                    
     int count(int bin);         
     double lowerBoundx(int bin);
@@ -72,7 +71,7 @@ namespace FastPartons{
     double binWidthy;
     int binCountx;
     int binCounty;
-    vector< vector<double > > weights2d;
+    vector< vector<double> > weights2d;
   };
 }
 

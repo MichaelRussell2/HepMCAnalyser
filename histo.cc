@@ -1,5 +1,6 @@
 #include <histo.hh>
 
+//@TODO: rebin, histeps option, setw
 //FastPartons::Histo::Histo() {}
 //FastPartons::Histo::~Histo() {}
 
@@ -56,6 +57,13 @@ void FastPartons::Histo::fill(double entry, double weight) {
   return;
 }
 
+//scale bins by common factor
+void FastPartons::Histo::scale(double scalefac) {
+  for (int i=0; i<binCount; i++){
+    weights[i] *= scalefac;
+  }
+  return;   
+}
 
 //write out raw histogram
 void FastPartons::Histo::write(const char *outfile){
@@ -78,16 +86,6 @@ void FastPartons::Histo::write(const char *outfile){
  weights.clear();
 }
 
-//write out normalised histogram
-void FastPartons::Histo::write(const char *outfile, double norm){
- std::ofstream fout;
- fout.open(outfile);
-  for (int i=0; i<binCount; i++){
-    fout << lowerBound(i) << "  " << upperBound(i) << "  " << weights[i]/norm << endl;
-  }
-  fout.close();
-  weights.clear();
-}
 
 //underflow
 double FastPartons::Histo::underflow(){
@@ -172,6 +170,16 @@ void FastPartons::Histo2d::fill(double xentry, double yentry, double weight) {
   return;
 }
 
+//scale bins by common factor
+void FastPartons::Histo2d::scale(double scalefac) {
+  for (int i=0; i<binCountx; i++){
+    for (int j=0; j<binCounty; j++){
+      weights2d[i][j] *= scalefac;
+    }
+  }
+  return;   
+}
+
 //write out raw 2d histogram
 void FastPartons::Histo2d::write(const char *outfile){
  std::ofstream fout;
@@ -184,20 +192,6 @@ void FastPartons::Histo2d::write(const char *outfile){
   fout.close();
   weights2d.clear();
 }
-
-//write out normalized 2d histogram
-void FastPartons::Histo2d::write(const char *outfile, double norm){
- std::ofstream fout;
- fout.open(outfile);
-  for (int i=0; i<binCountx; i++){
-    for (int j=0; j<binCounty; j++){
-      fout << lowerBoundx(i) << "  " << upperBoundx(i) << "  " << lowerBoundy(j) << "  " << upperBoundy(j) << "  " << weights2d[i][j]/norm  << endl;
-    }
-  }
-  fout.close();
-  weights2d.clear();
-}
-
 
 //integral of a 2d histogram
 double FastPartons::Histo2d::integral(){
